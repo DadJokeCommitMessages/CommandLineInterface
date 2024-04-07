@@ -8,12 +8,6 @@ class Application
     {
         Display.ShowTitle();
 
-        Dictionary<string, Func<Task>> commandActions = new Dictionary<string, Func<Task>>()
-        {
-            { "get-joke", Command.getJoke },
-            { "submit-joke", Command.SubmitJoke }
-        };
-
         while (true)
         {
             Console.ForegroundColor = ConsoleColor.Green;
@@ -25,17 +19,12 @@ class Application
             if (input == "exit")
                 break;
 
-            if (commandActions.TryGetValue(input, out Func<Task>? action))
+            if (Command.JokeMethods.TryGetValue(input, out Func<Task>? action))
             {
-                string task = "";
-                if(input=="get-joke") task = "get";
-                else task= "submit";
-                Display.ShowJokeTypes($"Please choose the type of joke you would like to " + task + "?");
+                string task = input == "get-joke" ? "get" : "submit";
+
+                Display.ShowJokeTypes($"Please choose the type of joke you would like to " + task + "?",task);
                 action().Wait();
-            }
-            else if(false){
-
-
             }
             else
             {

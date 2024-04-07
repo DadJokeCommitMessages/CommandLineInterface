@@ -2,73 +2,107 @@
 class Command
 {
 
+    public static Dictionary<string, Func<Task>> JokeMethods = new Dictionary<string, Func<Task>>()
+    {
+        { "get-joke", GetJoke },
+        { "add-joke", AddJoke }
+    };
 
-    public static async Task getJoke()
+
+    public static Dictionary<string, Func<Task>> UserJokeMethods = new Dictionary<string, Func<Task>>()
+    {
+        { "get-user-jokes", ViewUserJokes },
+        { "edit-joke", EditJoke },
+        { "delete-joke", DeleteJoke }
+    };
+
+    private static readonly Dictionary<string, Func<Task>> GetJokeActions = new Dictionary<string, Func<Task>>
+    {
+        ["0"] = async () => await ApiCalls.GetJoke(),
+        ["1"] = async () => await ApiCalls.GetJoke("fix"),
+        ["2"] = async () => await ApiCalls.GetJoke("feature"),
+        ["3"] = async () => await ApiCalls.GetJoke("refactor"),
+        ["4"] = async () => await ApiCalls.GetJoke("style"),
+        ["5"] = async () => await ApiCalls.GetJoke("docs"),
+        ["6"] = async () => await ApiCalls.GetJoke("test"),
+        ["7"] = async () => await ApiCalls.GetJoke("chore")
+    };
+
+    private static readonly Dictionary<string, Func<Task>> AddJokeActions = new Dictionary<string, Func<Task>>
     {
 
-        string? choice = Console.ReadLine();
-        Console.WriteLine("\n");
-
-        switch (choice)
+        ["1"] = async () =>
         {
-            case "1":
-                //await ApiCalls.GetRandomJoke();
-                //Make API get Call  await ApiCalls.GetJoke();
-                break;
-            case "2":
-                Console.WriteLine("Fix Joke selected.");
-                //Make API get Call  await ApiCalls.GetJoke(type);
-                break;
-            case "3":
-                Console.WriteLine("Feature Joke selected.");
-                //Make API post Call await ApiCalls.AddJoke(type);
+            Console.WriteLine("Please enter the fix joke:");
+            string joke = Console.ReadLine();
+            await ApiCalls.AddJoke("fix", joke);
+        },
+        ["2"] = async () =>
+        {
+            Console.WriteLine("Please enter the feature joke:");
+            string joke = Console.ReadLine();
+            await ApiCalls.AddJoke("feature", joke);
+        },
+        ["3"] = async () =>
+        {
+            Console.WriteLine("Please enter the refactor joke:");
+            string joke = Console.ReadLine();
+            await ApiCalls.AddJoke("refactor", joke);
+        },
+        ["4"] = async () =>
+        {
+            Console.WriteLine("Please enter the style joke:");
+            string joke = Console.ReadLine();
+            await ApiCalls.AddJoke("style", joke);
+        },
 
-                break;
-            default:
-                Console.WriteLine("Invalid choice.");
-                break;
+        ["5"] = async () =>
+        {
+            Console.WriteLine("Please enter the documentation joke:");
+            string joke = Console.ReadLine();
+            await ApiCalls.AddJoke("docs", joke);
+        },
+
+
+        ["6"] = async () =>
+        {
+            Console.WriteLine("Please enter the test joke:");
+            string joke = Console.ReadLine();
+            await ApiCalls.AddJoke("test", joke);
+        },
+        ["7"] = async () =>
+        {
+            Console.WriteLine("Please enter the chore joke:");
+            string joke = Console.ReadLine();
+            await ApiCalls.AddJoke("chore", joke);
         }
+    };
 
-        Console.WriteLine("\n\n");
+
+    public static async Task GetJoke()
+    {
+        string choice = Console.ReadLine();
+        if (GetJokeActions.TryGetValue(choice, out var action))
+        {
+            await action();
+        }
+        else
+        {
+            Display.PrintErrorMessage("Invalid choice.");
+        }
     }
 
-
-    public static async Task SubmitJoke()
+    public static async Task AddJoke()
     {
-        string? submission = Console.ReadLine();
-        string? joke;
-
-        switch (submission)
+        string submission = Console.ReadLine();
+        if (AddJokeActions.TryGetValue(submission, out var action))
         {
-            case "1":
-                Console.WriteLine("Please enter the random joke:");
-                joke = Console.ReadLine();
-                Console.WriteLine("Submitting random joke...");
-                //await ApiCalls.SubmitJoke(type,joke);
-                break;
-
-            case "2":
-                Console.WriteLine("Please enter the fix joke:");
-                joke = Console.ReadLine();
-                Console.WriteLine("Submitting fix joke...");
-                //await ApiCalls.SubmitJoke(type,joke);
-                break;
-
-            case "3":
-                Console.WriteLine("Please enter the feature joke:");
-                joke = Console.ReadLine();
-                Console.WriteLine("Submitting feature joke...");
-                //await ApiCalls.SubmitJoke(type,joke);
-                break;
-
-            default:
-                Console.ForegroundColor = ConsoleColor.DarkRed;
-                Console.WriteLine("Invalid choice");
-                Console.ResetColor();
-                break;
+            await action();
         }
-
-        Console.WriteLine("\n\n");
+        else
+        {
+            Display.PrintErrorMessage("Invalid choice");
+        }
     }
 
     public static async Task ViewUserJokes()
@@ -86,6 +120,8 @@ class Command
     {
 
     }
+
+
 
 }
 

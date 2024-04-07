@@ -1,78 +1,87 @@
 using System;
-using System.Net.Http;
-using System.Text.Json;
 using System.Threading.Tasks;
+using System.Text.Json;
+using System.Net.Http;
 
 class ApiCalls
 {
-    //This is just a test call to some api (will be deleted)
-    public static async Task GetRandomJoke()
-    {
-        using (HttpClient client = new HttpClient())
-        {
-            try
-            {
-                HttpResponseMessage response = await client.GetAsync("https://official-joke-api.appspot.com/random_joke");
-                response.EnsureSuccessStatusCode();
-                string responseBody = await response.Content.ReadAsStringAsync();
 
-                var jokeData = JsonSerializer.Deserialize<Joke>(responseBody);
-                string setup = jokeData?.setup ?? "No setup found";
-                string punchline = jokeData?.punchline ?? "No punchline found";
-
-                Console.WriteLine("Here's a joke for you:");
-                Console.WriteLine($"Setup: {setup}");
-                Console.WriteLine($"Punchline: {punchline}");
-            }
-            catch (HttpRequestException e)
-            {
-                Console.WriteLine($"An error occurred while fetching a joke: {e.Message}");
-            }
-        }
-    }
-
-    public class Joke
-    {
-        public string? setup { get; set; }
-        public string? punchline { get; set; }
-    }
+    private static readonly string baseUrl = "http://localhost:5282/api/";
+    private static readonly ApiHelper apiHelper = new ApiHelper(baseUrl);
 
     public static async Task GetJoke(string type = "")
     {
+        string endpoint = "joke?jokeType=" + type;
+        var getResponse = await apiHelper.GetAsync(endpoint);
 
+        if (getResponse.IsSuccessStatusCode)
+        {
+            var responseContent = await getResponse.Content.ReadAsStringAsync();
+
+            var joke = JsonSerializer.Deserialize<JokeResponse>(responseContent);
+
+            if (joke != null)
+            {
+                Console.WriteLine(joke.story);
+            }
+            else
+            {
+                Display.PrintErrorMessage("Oops! Unable to display the joke. The response might be unexpected.");
+            }
+        }
+        else
+        {
+            Display.PrintErrorMessage($"Failed to retrieve joke. Status code: {getResponse.StatusCode}");
+        }
     }
 
-    public static async Task GetUserJokes(string type)
-    {
 
+
+
+    public static async Task GetUserJokes(string arg)
+    {
+        int userID = User.GetUserID();
+        throw new NotImplementedException();
     }
 
-    public static async Task AddJoke(string type)
+    public static async Task AddJoke(string type, string joke)
     {
 
+        string endpoint = "joke";
+
+        JokePostRequest jokeRequest = new JokePostRequest(joke, type);
+        string jsonPayload = jokeRequest.ToJsonString();
+
+
+        try
+        {
+            HttpResponseMessage response = await apiHelper.PostAsync(endpoint, jsonPayload);
+
+            if (response.IsSuccessStatusCode)
+            {
+                Display.PrintSuccessMessage("\nJoke submitted successfully. Status: " + response.StatusCode);
+            }
+            else
+            {
+                 Display.PrintErrorMessage("Error: " + response.ReasonPhrase);
+            }
+        }
+        catch (Exception e)
+        {
+             Display.PrintErrorMessage("Exception: " + e.Message);
+        }
     }
 
-    public static async Task EditJoke(string type)
+    public static async Task EditJoke(string arg)
     {
-
+        throw new NotImplementedException();
     }
 
-    public static async Task DeleteJoke(string type)
+    public static async Task DeleteJoke(string arg)
     {
-
+        throw new NotImplementedException();
     }
 
-    public static Dictionary<string, Func<string, Task>> JokeMethods = new Dictionary<string, Func<string, Task>>
-    {
-        { "get-joke", GetJoke },
-        { "add-joke", AddJoke }
-    };
-
-    public static Dictionary<string, Func<string, Task>> UserJokeMethods = new Dictionary<string, Func<string, Task>>
-    {
-        { "get-user-jokes", GetUserJokes },
-        { "edit-joke", EditJoke },
-        { "delete-joke", DeleteJoke }
-    };
 
 }
+
