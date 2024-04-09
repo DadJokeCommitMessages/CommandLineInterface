@@ -38,6 +38,8 @@ class Display
     public static void ShowJokeTypes(string prompt, string task)
     {
         Console.WriteLine(prompt + ":\n");
+
+        string start = (task == "get") ? "0" : "1";
         if (task == "get")
         {
             SetConsoleColor("DarkYellow");
@@ -60,7 +62,7 @@ class Display
 
         SetConsoleColor("White");
 
-        Console.Write("\nEnter your choice (1-7): ");
+        Console.Write($"\nEnter your choice ({start}-7): ");
     }
 
     public static void PrintErrorMessage(string message)

@@ -1,3 +1,4 @@
+using System.Text.Json;
 
 class Command
 {
@@ -11,7 +12,7 @@ class Command
 
     public static Dictionary<string, Func<Task>> UserJokeMethods = new Dictionary<string, Func<Task>>()
     {
-        { "get-user-jokes", ViewUserJokes },
+        { "get-my-jokes", ViewUserJokes },
         { "edit-joke", EditJoke },
         { "delete-joke", DeleteJoke }
     };
@@ -107,24 +108,24 @@ class Command
 
     public static async Task ViewUserJokes()
     {
+        try
+        {
 
+            await ApiCalls.GetUserJokes("");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("An error occurred while viewing user jokes: " + ex.Message);
+        }
     }
-
 
     public static async Task EditJoke()
     {
-
+        throw new NotImplementedException();
     }
 
     public static async Task DeleteJoke()
     {
-
+        throw new NotImplementedException();
     }
-
-
-
 }
-
-
-
-
