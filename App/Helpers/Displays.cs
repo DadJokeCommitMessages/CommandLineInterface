@@ -1,5 +1,10 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+
+using System.Linq;
+
 
 class Display
 {
@@ -33,6 +38,12 @@ class Display
         Console.WriteLine("                |_|                                                                                              |___/     ");
         Console.ResetColor();
         Console.WriteLine("\n\n");
+    }
+
+    public static void DisplayPrompt(){
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write("\nBCM > ");
+            Console.ResetColor();
     }
 
     public static void ShowJokeTypes(string prompt, string task)
@@ -84,5 +95,66 @@ class Display
             Console.ForegroundColor = colors[colorName];
         else
             Console.ForegroundColor = ConsoleColor.White;
+    }
+
+    public static void DisplayTable(OrderedDictionary jokeMap)
+    {
+        int maxStoryWidth = jokeMap.Values.Cast<JokeResponse>().Max(j => j.story.Length);
+
+        Console.ForegroundColor = ConsoleColor.DarkGreen;
+        Console.Write($"  {"ID".PadRight(5)}  ");
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.Write($" {"Joke".PadRight(maxStoryWidth)} ");
+        Console.ForegroundColor = ConsoleColor.Magenta;
+        Console.WriteLine($" {"Type".PadRight(8)}");
+        Console.ResetColor();
+
+        Console.ForegroundColor = ConsoleColor.DarkCyan;
+        Console.WriteLine($"{new string('-', 8)}{new string('-', maxStoryWidth)}{new string('-', 11)}");
+        Console.ResetColor();
+
+        foreach (DictionaryEntry entry in jokeMap)
+        {
+            JokeResponse joke = (JokeResponse)entry.Value;
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write($"{entry.Key,5}");
+
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.Write($" | {joke.story.PadRight(maxStoryWidth)}");
+
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine($" | {joke.jokeType,-8}");
+
+            Console.ResetColor();
+        }
+        Console.WriteLine();
+    }
+
+    public static bool GetUserConfirmation(string message)
+    {
+        bool confirmed = false;
+
+        do
+        {
+            SetConsoleColor("DarkYellow");
+            Console.Write($"{message} (yes/no): ");
+            SetConsoleColor("White");
+            string userInput = Console.ReadLine().Trim().ToLower();
+
+            switch (userInput)
+            {
+                case "yes":
+                    confirmed = true;
+                    break;
+                case "no":
+                    confirmed = false;
+                    break;
+                default:
+                    Console.WriteLine("Invalid input. Please enter 'yes' or 'no'.");
+                    break;
+            }
+        } while (!confirmed);
+
+        return confirmed;
     }
 }

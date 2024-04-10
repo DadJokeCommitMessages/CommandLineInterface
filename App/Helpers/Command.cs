@@ -9,7 +9,6 @@ class Command
         { "add-joke", AddJoke }
     };
 
-
     public static Dictionary<string, Func<Task>> UserJokeMethods = new Dictionary<string, Func<Task>>()
     {
         { "get-my-jokes", ViewUserJokes },
@@ -110,22 +109,35 @@ class Command
     {
         try
         {
-
-            await ApiCalls.GetUserJokes("");
+            await ApiCalls.GetUserJokes();
         }
         catch (Exception ex)
         {
-            Console.WriteLine("An error occurred while viewing user jokes: " + ex.Message);
+            Display.PrintErrorMessage("An error occurred while trying to get your jokes: " + ex.Message);
         }
     }
 
     public static async Task EditJoke()
     {
-        throw new NotImplementedException();
+        try
+        {
+            await ApiCalls.EditJoke();
+        }
+        catch (Exception ex)
+        {
+            Display.PrintErrorMessage("An error occurred while trying to edit your joke: " + ex.Message);
+        }
     }
 
     public static async Task DeleteJoke()
-    {
-        throw new NotImplementedException();
+    { 
+        try
+        {
+            await ApiCalls.DeleteJoke();
+        }
+        catch (Exception ex)
+        {
+            Display.PrintErrorMessage("An error occurred while trying to delete your joke: " + ex.Message);
+        }
     }
 }

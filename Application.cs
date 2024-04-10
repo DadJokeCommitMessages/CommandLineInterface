@@ -10,14 +10,11 @@ class Application
 
         while (true)
         {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write("\nBCM > ");
-            Console.ResetColor();
+            Display.DisplayPrompt();
             string? input = Console.ReadLine() ?? "".ToLower();
             Console.WriteLine();
 
-            if (input == "exit")
-                break;
+            if (input == "exit")  break;
 
             if (Command.JokeMethods.TryGetValue(input, out Func<Task>? action))
             {
