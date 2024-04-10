@@ -82,6 +82,7 @@ class Command
     public static async Task GetJoke()
     {
         string choice = Console.ReadLine();
+        Console.WriteLine();
         if (GetJokeActions.TryGetValue(choice, out var action))
         {
             await action();

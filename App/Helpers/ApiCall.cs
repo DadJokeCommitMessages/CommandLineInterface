@@ -22,7 +22,7 @@ class ApiCalls
 
             if (joke != null)
             {
-                Console.WriteLine(joke.story);
+                Console.WriteLine("git commit -m '"+joke.story+"'");
             }
             else
             {
