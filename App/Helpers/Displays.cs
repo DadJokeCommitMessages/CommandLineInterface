@@ -17,7 +17,9 @@ class Display
         { "Blue", ConsoleColor.Blue },
         { "DarkCyan", ConsoleColor.DarkCyan },
         { "DarkMagenta", ConsoleColor.DarkMagenta },
-        { "DarkGreen", ConsoleColor.DarkGreen }
+        { "DarkGreen", ConsoleColor.DarkGreen },
+        {"DarkRed", ConsoleColor.DarkRed },
+        {"White", ConsoleColor.White },
     };
 
     public static void ShowTitle()
@@ -40,10 +42,11 @@ class Display
         Console.WriteLine("\n\n");
     }
 
-    public static void DisplayPrompt(){
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write("\nBCM > ");
-            Console.ResetColor();
+    public static void DisplayPrompt()
+    {
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.Write("\nBCM > ");
+        Console.ResetColor();
     }
 
     public static void ShowJokeTypes(string prompt, string task)
@@ -78,7 +81,7 @@ class Display
 
     public static void PrintErrorMessage(string message)
     {
-        SetConsoleColor("Red");
+        SetConsoleColor("DarkRed");
         Console.WriteLine(message);
         Console.ResetColor();
     }
@@ -132,12 +135,12 @@ class Display
 
     public static bool GetUserConfirmation(string message)
     {
-        bool confirmed = false;
-
+        bool confirmed;
         do
         {
             SetConsoleColor("DarkYellow");
             Console.Write($"{message} (yes/no): ");
+            Console.WriteLine();
             SetConsoleColor("White");
             string userInput = Console.ReadLine().Trim().ToLower();
 
@@ -145,16 +148,53 @@ class Display
             {
                 case "yes":
                     confirmed = true;
-                    break;
+                    return confirmed;
                 case "no":
                     confirmed = false;
-                    break;
+                    return confirmed;
                 default:
-                    Console.WriteLine("Invalid input. Please enter 'yes' or 'no'.");
+                    PrintErrorMessage("\nInvalid input. Please enter 'yes' or 'no'.");
                     break;
             }
-        } while (!confirmed);
+        } while (true);
+    }
 
-        return confirmed;
+    public static string GetType(string[] jokeTypes)
+    {
+        int typeIndex;
+        do
+        {
+            Console.Write($"\nEnter your choice ({1}-{jokeTypes.Length}): ");
+            string input = Console.ReadLine();
+
+            if (int.TryParse(input, out typeIndex))
+            {
+                return jokeTypes[typeIndex - 1];
+            }
+            else
+            {
+                PrintErrorMessage("Invalid input. Please enter a valid integer.");
+                return "";
+            }
+        }
+        while (typeIndex > 0 && typeIndex < jokeTypes.Length);
+    }
+
+    public static string GetEditOptions()
+    {
+        Console.WriteLine("\nWhat would you like to edit? \n");
+        Console.WriteLine("1. Edit Joke");
+        Console.WriteLine("2. Edit Joke Type");
+
+        return Console.ReadLine();
+    }
+
+    public static void WriteLineColoured(string line, string colour)
+    {
+
+        Display.SetConsoleColor(colour);
+        Console.WriteLine(line);
+        Display.SetConsoleColor("White");
+
     }
 }
