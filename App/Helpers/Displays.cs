@@ -1,10 +1,5 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Collections.Specialized;
-
-using System.Linq;
-
 
 class Display
 {
@@ -187,7 +182,7 @@ public static void PrintSuccessMessage(string message)
         WriteLineColoured("Tired of writing helpful commit messages?\nWell, you've come to the right place. Get your dad joke commit messages today.", "Blue");
         Console.WriteLine("");
         
-        WriteLineColoured("Available commands:", "DarkMagenta");
+        WriteLineColoured("Available commands:\n", "DarkMagenta");
         WriteLineColoured("- get-joke: Retrieve a joke.", "Cyan");
         WriteLineColoured("- add-joke: Add a new joke.", "Magenta");
         WriteLineColoured("- get-my-jokes: View all jokes added by you.", "Green");
@@ -195,7 +190,7 @@ public static void PrintSuccessMessage(string message)
         WriteLineColoured("- delete-joke: Delete a joke.", "DarkCyan");
         
         Console.WriteLine("");
-        WriteLineColoured("Enjoy joking around! :)", "DarkMagenta");
+        WriteLineColoured("Enjoy joking around! :) \n\n", "DarkMagenta");
         
     }
 

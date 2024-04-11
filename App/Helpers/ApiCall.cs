@@ -1,7 +1,6 @@
 using System.Text.Json;
 using System.Collections.Specialized;
 
-
 class ApiCalls
 {
     private static readonly string baseUrl = "http://localhost:5282/api/";
