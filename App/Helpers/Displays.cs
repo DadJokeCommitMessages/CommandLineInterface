@@ -8,7 +8,7 @@ using System.Linq;
 
 class Display
 {
-    private static Dictionary<string, ConsoleColor> colors = new Dictionary<string, ConsoleColor>
+    private static Dictionary<string, ConsoleColor> colours = new Dictionary<string, ConsoleColor>
     {
         { "DarkYellow", ConsoleColor.DarkYellow },
         { "Cyan", ConsoleColor.Cyan },
@@ -24,17 +24,17 @@ class Display
 
     public static void ShowTitle()
     {
-        SetConsoleColor("Blue");
+        SetConsoleColour("Blue");
         Console.WriteLine("______                           _             _          _   _____                           _ _    ___  ___              ");
-        SetConsoleColor("DarkMagenta");
+        SetConsoleColour("DarkMagenta");
         Console.WriteLine("| ___ \\                         | |           | |        | | /  __ \\                         (_) |   |  \\/  |              ");
-        SetConsoleColor("Green");
+        SetConsoleColour("Green");
         Console.WriteLine("| |_/ / ___  ___ _ __   ___  ___| |_ __ _  ___| | ___  __| | | /  \\/ ___  _ __ ___  _ __ ___  _| |_  | .  . |___  __ _ ___ ");
-        SetConsoleColor("Green");
+        SetConsoleColour("Green");
         Console.WriteLine("| ___ \\/ _ \\/ __| '_ \\ / _ \\/ __| __/ _` |/ __| |/ _ \\/ _` | | |    / _ \\| '_ ` _ \\| '_ ` _ \\| | __| | |\\/| / __|/ _` / __|");
-        SetConsoleColor("DarkMagenta");
+        SetConsoleColour("DarkMagenta");
         Console.WriteLine("| |_/ /  __/\\__ \\ |_) |  __/ (__| || (_| | (__| |  __/ (_| | | \\__/\\ (_) | | | | | | | | | | | |_  | |  | \\__ \\ (_| \\__ \\");
-        SetConsoleColor("Blue");
+        SetConsoleColour("Blue");
         Console.WriteLine("\\____/ \\___||___/ .__/ \\___|\\___|\\__\\__,_|\\___|_|\\___|\\__,_|  \\____/\\___/|_| |_| |_|_| |_| |_|_|\\__| \\_|  |_/___/\\__,_|___/");
         Console.WriteLine("                | |                                                                                               __/ |    ");
         Console.WriteLine("                |_|                                                                                              |___/     ");
@@ -56,46 +56,46 @@ class Display
         string start = (task == "get") ? "0" : "1";
         if (task == "get")
         {
-            SetConsoleColor("DarkYellow");
+            SetConsoleColour("DarkYellow");
             Console.WriteLine("0. Random Joke");
         }
-        SetConsoleColor("Cyan");
+        SetConsoleColour("Cyan");
         Console.WriteLine("1. Fix Joke");
-        SetConsoleColor("Magenta");
+        SetConsoleColour("Magenta");
         Console.WriteLine("2. Feature Joke");
-        SetConsoleColor("Green");
+        SetConsoleColour("Green");
         Console.WriteLine("3. Refactor Joke");
-        SetConsoleColor("Blue");
+        SetConsoleColour("Blue");
         Console.WriteLine("4. Style Joke");
-        SetConsoleColor("DarkCyan");
+        SetConsoleColour("DarkCyan");
         Console.WriteLine("5. Documentation Joke");
-        SetConsoleColor("DarkCyan");
+        SetConsoleColour("DarkCyan");
         Console.WriteLine("6. Test Joke");
-        SetConsoleColor("DarkMagenta");
+        SetConsoleColour("DarkMagenta");
         Console.WriteLine("7. Chore Joke");
 
-        SetConsoleColor("White");
+        SetConsoleColour("White");
 
         Console.Write($"\nEnter your choice ({start}-7): ");
     }
 
     public static void PrintErrorMessage(string message)
     {
-        SetConsoleColor("DarkRed");
+        SetConsoleColour("DarkRed");
         Console.WriteLine(message);
         Console.ResetColor();
     }
     public static void PrintSuccessMessage(string message)
     {
-        SetConsoleColor("Green");
+        SetConsoleColour("Green");
         Console.WriteLine(message);
         Console.ResetColor();
     }
 
-    public static void SetConsoleColor(string colorName)
+    public static void SetConsoleColour(string colorName)
     {
-        if (colors.ContainsKey(colorName))
-            Console.ForegroundColor = colors[colorName];
+        if (colours.ContainsKey(colorName))
+            Console.ForegroundColor = colours[colorName];
         else
             Console.ForegroundColor = ConsoleColor.White;
     }
@@ -138,10 +138,10 @@ class Display
         bool confirmed;
         do
         {
-            SetConsoleColor("DarkYellow");
+            SetConsoleColour("DarkYellow");
             Console.Write($"{message} (yes/no): ");
             Console.WriteLine();
-            SetConsoleColor("White");
+            SetConsoleColour("White");
             string userInput = Console.ReadLine().Trim().ToLower();
 
             switch (userInput)
@@ -192,9 +192,9 @@ class Display
     public static void WriteLineColoured(string line, string colour)
     {
 
-        Display.SetConsoleColor(colour);
+        Display.SetConsoleColour(colour);
         Console.WriteLine(line);
-        Display.SetConsoleColor("White");
+        Display.SetConsoleColour("White");
 
     }
 }
