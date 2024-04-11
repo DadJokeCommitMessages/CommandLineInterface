@@ -7,7 +7,7 @@ class Application
     static void Main()
     {
         Display.ShowTitle();
-
+        User.SignIn();
         while (true)
         {
             Display.DisplayPrompt();
