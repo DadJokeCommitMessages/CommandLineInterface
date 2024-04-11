@@ -16,10 +16,12 @@ jobs:
       - name: 🚚 Get latest code
         uses: actions/checkout@v2
 
+      - name: Create config file for secrets
+        run: |
+          echo "Configure appsettings.json"
+          echo -e "{\n  \"CLIENT_ID\": \"${{ secrets.CLIENT_ID }}\",\n  \"CLIENT_SECRET\": \"${{ secrets.CLIENT_SECRET }}\"\n}" > appsettings.json
+
       - name: 🔧 Build and publish .NET application Windows
-        env:
-          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-          CLIENT_ID: ${{ secrets.CLIENT_ID }}
         run: dotnet publish -c Release -r win-x64
 
       - name: 📁 Create release archive
