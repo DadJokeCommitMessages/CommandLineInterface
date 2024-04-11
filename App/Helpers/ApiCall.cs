@@ -23,7 +23,7 @@ class ApiCalls
 
             if (joke != null)
             {
-                Console.WriteLine("git commit -m '" + joke.story + "'");
+                Console.WriteLine("git commit -m \"" + joke.story + "\"");
             }
             else
             {
@@ -278,7 +278,7 @@ class ApiCalls
                 }
                 else
                 {
-                    Display.PrintSuccessMessage($"Oauth failed - the token got recieved from Google but the server failed to save it");
+                    Display.PrintErrorMessage($"Oauth failed - the token got received from Google but the server failed to save it");
                     return null;
                 }
                     

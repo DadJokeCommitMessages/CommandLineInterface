@@ -1,19 +1,14 @@
-using Microsoft.AspNetCore.Authentication.Google;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Identity.Client;
 using System.Net;
 using System.Net.Http.Headers;
 class User
 {
-    public static int userID;
     static string? clientSecret;
     static string? clientID;
     static string? redirectURL = "http://localhost:8080";
     public static string? accessToken { get; set; }
 
-    public static async void  SignIn()
+    public static async Task SignIn()
     {
         var builder = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
@@ -27,7 +22,7 @@ class User
 
         HttpListenerRequest authRequest = Server.StartServer([]);
         string authCode;
-        if (authRequest.QueryString.HasKeys() && authRequest.QueryString["code"]!=null)
+        if (authRequest.QueryString.HasKeys() && authRequest.QueryString["code"] != null)
         {
             authCode = authRequest.QueryString["code"];
         }
@@ -43,11 +38,6 @@ class User
         {
             Display.PrintErrorMessage($"Oauth failed - the token got recieved from Google but the server failed to save it");
         }
-    }
-
-    public static int GetUserID()
-    {
-        return userID;
     }
 
     public static Boolean IsAccessTokenValid()

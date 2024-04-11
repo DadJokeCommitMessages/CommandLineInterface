@@ -1,11 +1,11 @@
 class Application
 {
-    static void Main()
+    static async Task Main()
     {
         Display.ShowTitle();
         Display.DisplayHelp();
 
-        User.SignIn();
+        await User.SignIn();
         while (true)
         {
             Display.DisplayPrompt();
