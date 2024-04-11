@@ -1,0 +1,37 @@
+name: Create release
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-22.04
+    steps:
+      - name: 🚚 Get latest code
+        uses: actions/checkout@v2
+
+      - name: 🔧 Build and publish .NET application Windows
+        run: dotnet publish -c Release -r win-x64
+
+      - name: 📁 Create release archive
+        run: tar -czvf release.tar.gz -C bin/Release/net8.0/win-x64/publish/ .
+
+      - name: 🏷️ Bump version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🚀 Create a GitHub release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          body: ${{ steps.tag_version.outputs.changelog }}
+          artifacts: release.tar.gz
