@@ -5,6 +5,7 @@ class Application
         Display.ShowTitle();
         Display.DisplayHelp();
 
+        User.SignIn();
         while (true)
         {
             Display.DisplayPrompt();

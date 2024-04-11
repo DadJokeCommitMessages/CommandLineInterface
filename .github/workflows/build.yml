@@ -1,0 +1,21 @@
+name: Build
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  release:
+    name: Build Release
+    runs-on: ubuntu-22.04
+    steps:
+      - name: 🚚 Get latest code
+        uses: actions/checkout@v2
+
+      - name: Create config file for secrets
+        run: |
+          echo "Configure appsettings.json"
+          echo -e "{\n  \"CLIENT_ID\": \"${{ secrets.CLIENT_ID }}\",\n  \"CLIENT_SECRET\": \"${{ secrets.CLIENT_SECRET }}\"\n}" > appsettings.json
+
+      - name: 🔧 Build and publish .NET application Windows
+        run: dotnet publish -c Release -r win-x64

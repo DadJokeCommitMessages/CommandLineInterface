@@ -1,3 +1,4 @@
+using System.Net.Http.Headers;
 using System.Text;
 
 public class ApiHelper
@@ -10,6 +11,10 @@ public class ApiHelper
         this.httpClient = new HttpClient();
         this.baseUrl = baseUrl;
         this.httpClient.BaseAddress = new Uri(baseUrl);
+        if (User.IsAccessTokenValid() && User.accessToken != null)
+        {
+            this.httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(User.accessToken);
+        }
     }
 
     public async Task<HttpResponseMessage> PostAsync(string endpoint, string jsonPayload)
