@@ -1,10 +1,12 @@
 using System.Text.Json;
 using System.Collections.Specialized;
+using Microsoft.AspNetCore.Authentication.BearerToken;
+using System.Net.Http.Json;
 
 
 class ApiCalls
 {
-    private static readonly string baseUrl = "http://localhost:5282/api/";
+    private static readonly string baseUrl = "http://ec2-3-250-229-22.eu-west-1.compute.amazonaws.com:5282/api/";
     private static readonly ApiHelper apiHelper = new ApiHelper(baseUrl);
 
     private static OrderedDictionary jokeMap = new OrderedDictionary();
@@ -40,7 +42,7 @@ class ApiCalls
 
     public static async Task GetUserJokes()
     {
-        string newBaseUrl = "http://localhost:5282/";
+        string newBaseUrl = "http://ec2-3-250-229-22.eu-west-1.compute.amazonaws.com:5282/api/";
         ApiHelper newApiHelper = new ApiHelper(newBaseUrl);
         string endpoint = "jokes";
         jokeMap = new OrderedDictionary();
@@ -194,6 +196,44 @@ class ApiCalls
         catch (Exception ex)
         {
             Display.PrintErrorMessage($"An unexpected error occurred: {ex.Message}");
+        }
+    }
+
+    public static async Task<string?> Authenticate(string newBaseUrl)
+    {
+        ApiHelper newApiHelper = new ApiHelper(newBaseUrl);
+        var endpoint = $"";
+        try
+        {
+            var response = await newApiHelper.PostAsync(endpoint, "");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var dataObjects = await response.Content.ReadFromJsonAsync<Dictionary<string, object>>();
+                
+                if (dataObjects !=null && dataObjects["access_token"] != null)
+                {
+                    Display.PrintSuccessMessage($"Successfully signed in!");
+                    return dataObjects["access_token"].ToString();
+                    
+                }
+                else
+                {
+                    Display.PrintSuccessMessage($"Oauth failed - the token got recieved from Google but the server failed to save it");
+                    return null;
+                }
+                    
+            }
+            else
+            {
+                Display.PrintErrorMessage($"Failed to authenticate. Status code: {response.StatusCode}");
+                return null;
+            }
+        }
+        catch (Exception ex)
+        {
+            Display.PrintErrorMessage($"An unexpected error occurred: {ex.Message}");
+            return null;
         }
     }
 }
