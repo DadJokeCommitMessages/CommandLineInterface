@@ -7,6 +7,7 @@ class Application
     static void Main()
     {
         Display.ShowTitle();
+        Display.DisplayHelp();
 
         while (true)
         {
@@ -15,6 +16,12 @@ class Application
             Console.WriteLine();
 
             if (input == "exit")  break;
+
+            if (input == "help")
+            {
+                Display.DisplayHelp();
+                continue;
+            }
 
             if (Command.JokeMethods.TryGetValue(input, out Func<Task>? action))
             {
