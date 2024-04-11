@@ -1,5 +1,4 @@
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 public class JokePostRequest
 {
@@ -32,4 +31,16 @@ public class JokeResponse
         this.jokeType = jokeType;
     }
 
+}
+
+public class JokeType
+{
+    public int jokeID { get; set; }
+    public string jokeType { get; set; }
+
+    public JokeType(int jokeID,string jokeType)
+    {
+        this.jokeID = jokeID;
+        this.jokeType = jokeType;
+    }
 }
