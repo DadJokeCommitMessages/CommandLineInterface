@@ -22,26 +22,18 @@ class Display
         {"White", ConsoleColor.White },
     };
 
-    public static void ShowTitle()
-    {
-        SetConsoleColour("Blue");
-        Console.WriteLine("______                           _             _          _   _____                           _ _    ___  ___              ");
-        SetConsoleColour("DarkMagenta");
-        Console.WriteLine("| ___ \\                         | |           | |        | | /  __ \\                         (_) |   |  \\/  |              ");
-        SetConsoleColour("Green");
-        Console.WriteLine("| |_/ / ___  ___ _ __   ___  ___| |_ __ _  ___| | ___  __| | | /  \\/ ___  _ __ ___  _ __ ___  _| |_  | .  . |___  __ _ ___ ");
-        SetConsoleColour("Green");
-        Console.WriteLine("| ___ \\/ _ \\/ __| '_ \\ / _ \\/ __| __/ _` |/ __| |/ _ \\/ _` | | |    / _ \\| '_ ` _ \\| '_ ` _ \\| | __| | |\\/| / __|/ _` / __|");
-        SetConsoleColour("DarkMagenta");
-        Console.WriteLine("| |_/ /  __/\\__ \\ |_) |  __/ (__| || (_| | (__| |  __/ (_| | | \\__/\\ (_) | | | | | | | | | | | |_  | |  | \\__ \\ (_| \\__ \\");
-        SetConsoleColour("Blue");
-        Console.WriteLine("\\____/ \\___||___/ .__/ \\___|\\___|\\__\\__,_|\\___|_|\\___|\\__,_|  \\____/\\___/|_| |_| |_|_| |_| |_|_|\\__| \\_|  |_/___/\\__,_|___/");
-        Console.WriteLine("                | |                                                                                               __/ |    ");
-        Console.WriteLine("                |_|                                                                                              |___/     ");
-        Console.ResetColor();
-        Console.WriteLine("\n\n");
-    }
-
+public static void ShowTitle()
+{
+    WriteLineColoured("______                           _             _          _   _____                           _ _    ___  ___              ", "Blue");
+    WriteLineColoured("| ___ \\                         | |           | |        | | /  __ \\                         (_) |   |  \\/  |              ", "DarkMagenta");
+    WriteLineColoured("| |_/ / ___  ___ _ __   ___  ___| |_ __ _  ___| | ___  __| | | /  \\/ ___  _ __ ___  _ __ ___  _| |_  | .  . |___  __ _ ___ ", "Green");
+    WriteLineColoured("| ___ \\/ _ \\/ __| '_ \\ / _ \\/ __| __/ _` |/ __| |/ _ \\/ _` | | |    / _ \\| '_ ` _ \\| '_ ` _ \\| | __| | |\\/| / __|/ _` / __|", "Green");
+    WriteLineColoured("| |_/ /  __/\\__ \\ |_) |  __/ (__| || (_| | (__| |  __/ (_| | | \\__/\\ (_) | | | | | | | | | | | |_  | |  | \\__ \\ (_| \\__ \\", "DarkMagenta");
+    WriteLineColoured("\\____/ \\___||___/ .__/ \\___|\\___|\\__\\__,_|\\___|_|\\___|\\__,_|  \\____/\\___/|_| |_| |_|_| |_| |_|_|\\__| \\_|  |_/___/\\__,_|___/", "Blue");
+    WriteLineColoured("                | |                                                                                               __/ |    ", "Blue");
+    WriteLineColoured("                |_|                                                                                              |___/     ", "Blue");
+    WriteLineColoured("\n\n", "White");
+}
     public static void DisplayPrompt()
     {
         Console.ForegroundColor = ConsoleColor.Green;
@@ -50,47 +42,34 @@ class Display
     }
 
     public static void ShowJokeTypes(string prompt, string task)
+{
+    WriteLineColoured(prompt + ":\n", "White");
+
+    string start = (task == "get") ? "0" : "1";
+    if (task == "get")
     {
-        Console.WriteLine(prompt + ":\n");
-
-        string start = (task == "get") ? "0" : "1";
-        if (task == "get")
-        {
-            SetConsoleColour("DarkYellow");
-            Console.WriteLine("0. Random Joke");
-        }
-        SetConsoleColour("Cyan");
-        Console.WriteLine("1. Fix Joke");
-        SetConsoleColour("Magenta");
-        Console.WriteLine("2. Feature Joke");
-        SetConsoleColour("Green");
-        Console.WriteLine("3. Refactor Joke");
-        SetConsoleColour("Blue");
-        Console.WriteLine("4. Style Joke");
-        SetConsoleColour("DarkCyan");
-        Console.WriteLine("5. Documentation Joke");
-        SetConsoleColour("DarkCyan");
-        Console.WriteLine("6. Test Joke");
-        SetConsoleColour("DarkMagenta");
-        Console.WriteLine("7. Chore Joke");
-
-        SetConsoleColour("White");
-
-        Console.Write($"\nEnter your choice ({start}-7): ");
+        WriteLineColoured("0. Random Joke", "DarkYellow");
     }
+    WriteLineColoured("1. Fix Joke", "Cyan");
+    WriteLineColoured("2. Feature Joke", "Magenta");
+    WriteLineColoured("3. Refactor Joke", "Green");
+    WriteLineColoured("4. Style Joke", "Blue");
+    WriteLineColoured("5. Documentation Joke", "DarkCyan");
+    WriteLineColoured("6. Test Joke", "DarkCyan");
+    WriteLineColoured("7. Chore Joke", "DarkMagenta");
 
-    public static void PrintErrorMessage(string message)
-    {
-        SetConsoleColour("DarkRed");
-        Console.WriteLine(message);
-        Console.ResetColor();
-    }
-    public static void PrintSuccessMessage(string message)
-    {
-        SetConsoleColour("Green");
-        Console.WriteLine(message);
-        Console.ResetColor();
-    }
+    WriteLineColoured($"\nEnter your choice ({start}-7): ", "White");
+}
+
+   public static void PrintErrorMessage(string message)
+{
+    WriteLineColoured(message, "DarkRed");
+}
+
+public static void PrintSuccessMessage(string message)
+{
+    WriteLineColoured(message, "Green");
+}
 
     public static void SetConsoleColour(string colorName)
     {
@@ -185,6 +164,8 @@ class Display
         Console.WriteLine("\nWhat would you like to edit? \n");
         Console.WriteLine("1. Edit Joke");
         Console.WriteLine("2. Edit Joke Type");
+
+        Console.Write("\nEnter your choice (1-2): ");
 
         return Console.ReadLine();
     }

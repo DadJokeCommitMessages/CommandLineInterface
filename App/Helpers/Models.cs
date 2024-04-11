@@ -33,3 +33,15 @@ public class JokeResponse
     }
 
 }
+
+public class JokeType
+{
+    public int jokeID { get; set; }
+    public string jokeType { get; set; }
+
+    public JokeType(int jokeID,string jokeType)
+    {
+        this.jokeID = jokeID;
+        this.jokeType = jokeType;
+    }
+}
