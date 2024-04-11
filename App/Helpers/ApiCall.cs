@@ -182,7 +182,7 @@ class ApiCalls
 
         JokeResponse? selectedJoke = jokeMap[jokeNumberInput] as JokeResponse;
 
-        Console.WriteLine($"\nDeleting joke #{jokeNumber}: \"{jokeNumberInput}\"");
+        Console.WriteLine($"\nDeleting joke #{jokeNumber}: \"{selectedJoke.story}\"");
 
         bool confirmation = Display.GetUserConfirmation("\nWould you like to confirm deletion?");
 
