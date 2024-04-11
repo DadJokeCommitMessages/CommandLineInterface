@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Identity.Client;
 using System.Net;
@@ -7,16 +8,20 @@ using System.Net.Http.Headers;
 class User
 {
     public static int userID;
-    static string? clientSecret = Environment.GetEnvironmentVariable("CLIENT_SECRET");
-    static string? clientID = Environment.GetEnvironmentVariable("CLIENT_ID");
+    static string? clientSecret;
+    static string? clientID;
     static string? redirectURL = "http://localhost:8080";
     public static string? accessToken { get; set; }
 
-    static string? firstUri = $"https://accounts.google.com/o/oauth2/auth?response_type=code&client_id={clientID}&scope=openid%20profile%20email&redirect_uri={redirectURL}";
     public static async void  SignIn()
     {
-        // User authentication 
-        userID = 1; // Example ID
+        var builder = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+        var configuration = builder.Build();
+
+        clientSecret = configuration["CLIENT_SECRET"];
+        clientID = configuration["CLIENT_ID"];
+        string? firstUri = $"https://accounts.google.com/o/oauth2/auth?response_type=code&client_id={clientID}&scope=openid%20profile%20email&redirect_uri={redirectURL}";
         Display.DisplayPrompt();
         Console.WriteLine($"Click on the link to sign in: \n{firstUri} ");
 

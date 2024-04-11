@@ -1,12 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
 class Application
 {
     static void Main()
     {
         Display.ShowTitle();
+        Display.DisplayHelp();
+
         User.SignIn();
         while (true)
         {
@@ -15,6 +13,12 @@ class Application
             Console.WriteLine();
 
             if (input == "exit")  break;
+
+            if (input == "help")
+            {
+                Display.DisplayHelp();
+                continue;
+            }
 
             if (Command.JokeMethods.TryGetValue(input, out Func<Task>? action))
             {

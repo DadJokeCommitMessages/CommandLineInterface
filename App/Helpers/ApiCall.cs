@@ -3,7 +3,6 @@ using System.Collections.Specialized;
 using Microsoft.AspNetCore.Authentication.BearerToken;
 using System.Net.Http.Json;
 
-
 class ApiCalls
 {
     private static readonly string baseUrl = "http://ec2-3-250-229-22.eu-west-1.compute.amazonaws.com:5282/api/";
@@ -24,7 +23,7 @@ class ApiCalls
 
             if (joke != null)
             {
-                Console.WriteLine("git commit -m '"+joke.story+"'");
+                Console.WriteLine("git commit -m '" + joke.story + "'");
             }
             else
             {
@@ -36,9 +35,6 @@ class ApiCalls
             Display.PrintErrorMessage($"Failed to retrieve joke. Status code: {getResponse.StatusCode}");
         }
     }
-
-
-
 
     public static async Task GetUserJokes()
     {
@@ -106,12 +102,27 @@ class ApiCalls
     {
         await GetUserJokes();
 
-        Display.SetConsoleColor("DarkGreen");
-        Console.WriteLine("\nPlease indicate the ID of the joke you want to edit");
-        Display.SetConsoleColor("White");
+        Display.WriteLineColoured("\nPlease indicate the ID of the joke you want to edit","DarkGreen");
 
         Console.Write($"\nEnter your choice (1-{jokeMap.Count}): ");
         string jokeNumberInput = Console.ReadLine();
+
+        JokeResponse? selectedJoke = jokeMap[jokeNumberInput] as JokeResponse;
+
+        string editChoice = Display.GetEditOptions();
+
+        if (editChoice == "2")
+        {
+            string answer = await askType();
+            selectedJoke.jokeType = answer;
+            await makePutRequest(selectedJoke);
+            return;
+        }
+        else if (editChoice != "1")
+        {
+            Display.PrintErrorMessage("Invalid Choice.");
+            return;
+        }
 
         if (!int.TryParse(jokeNumberInput, out int jokeNumber) || jokeNumber < 1 || jokeNumber > jokeMap.Count)
         {
@@ -119,27 +130,27 @@ class ApiCalls
             return;
         }
 
-        JokeResponse? selectedJoke = jokeMap[jokeNumberInput] as JokeResponse;
-
-
         Console.WriteLine($"\nEditing joke #{jokeNumber}: ");
 
-        Display.SetConsoleColor("Blue");
-        Console.Write($"\"{selectedJoke.story}\"");
-        Display.SetConsoleColor("white");
-
+        Display.WriteLineColoured($"\"{selectedJoke.story}\"","Blue");
 
         Console.Write("\n\nEnter the updated joke : ");
-        string updatedJoke = Console.ReadLine();
+        string? updatedJoke = Console.ReadLine();
 
         selectedJoke.story = updatedJoke;
+        await makePutRequest(selectedJoke);
+    }
 
-        var jsonPayload = JsonSerializer.Serialize(selectedJoke);
 
-        var endpoint = $"joke/{selectedJoke.jokeID}";
+
+    public static async Task makePutRequest( JokeResponse joke){
+
+        var jsonPayload = JsonSerializer.Serialize(joke);
+        var endpointPutJoke = $"joke/{joke.jokeID}";
+
         try
         {
-            var response = await apiHelper.PutAsync(endpoint, jsonPayload);
+            var response = await apiHelper.PutAsync(endpointPutJoke, jsonPayload);
 
             if (response.IsSuccessStatusCode)
             {
@@ -186,16 +197,64 @@ class ApiCalls
             if (response.IsSuccessStatusCode)
             {
 
-                Display.PrintSuccessMessage($"\nJoke with ID {selectedJoke.jokeID} deleted successfully!");
+                Display.PrintSuccessMessage($"\nJoke with ID {jokeNumberInput} deleted successfully!");
             }
             else
             {
-                Display.PrintErrorMessage($"Failed to delete joke with ID {selectedJoke.jokeID}. Status code: {response.StatusCode}");
+                Display.PrintErrorMessage($"Failed to delete joke with ID {jokeNumberInput}. Status code: {response.StatusCode}");
             }
         }
         catch (Exception ex)
         {
             Display.PrintErrorMessage($"An unexpected error occurred: {ex.Message}");
+        }
+    }
+
+
+    public static async Task<string> askType()
+    {
+        Console.WriteLine("What type are you interested in changing the current one to?\n");
+        var endpointGetType = $"jokeType/all ";
+
+        string[] colorNames = { "Cyan", "Magenta", "Green", "Blue", "DarkCyan", "DarkMagenta" };
+
+        try
+        {
+            HttpResponseMessage response = await apiHelper.GetAsync(endpointGetType);
+
+            if (response.IsSuccessStatusCode)
+            {
+                string jsonResponse = await response.Content.ReadAsStringAsync();
+                string[] jokeTypes = JsonSerializer.Deserialize<string[]>(jsonResponse);
+                int counter = 0;
+
+                foreach (string type in jokeTypes)
+                {
+                    string colorName = colorNames[counter % colorNames.Length];
+                    Display.SetConsoleColour(colorName);
+                    Console.WriteLine((counter + 1) + ". " + type);
+                    counter++;
+                }
+
+                Display.SetConsoleColour("White");
+
+                string typeChosen = Display.GetType(jokeTypes);
+                return typeChosen;
+            }
+            else
+            {
+                Display.PrintErrorMessage($"Failed to fetch jokes. Status code: {response.StatusCode}");
+                bool confirmation = Display.GetUserConfirmation("\nWould you still like to submit your joke without changing the type?");
+                if (confirmation) return "yes";
+                else return "no";
+            }
+        }
+        catch (Exception ex)
+        {
+            Display.PrintErrorMessage("An error occurred: " + ex.Message);
+            bool confirmation = Display.GetUserConfirmation("\nWould you still like to submit your joke without changing the type?");
+            if (confirmation) return "yes";
+            else return "no";
         }
     }
 
@@ -230,10 +289,9 @@ class ApiCalls
                 return null;
             }
         }
-        catch (Exception ex)
-        {
-            Display.PrintErrorMessage($"An unexpected error occurred: {ex.Message}");
-            return null;
+        catch(Exception ex){
+        Display.PrintErrorMessage("An error occurred: " + ex.Message);
+        return null;
         }
     }
 }
