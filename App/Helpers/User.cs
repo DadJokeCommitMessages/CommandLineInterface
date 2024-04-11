@@ -18,7 +18,7 @@ class User
         clientID = configuration["CLIENT_ID"];
         string? firstUri = $"https://accounts.google.com/o/oauth2/auth?response_type=code&client_id={clientID}&scope=openid%20profile%20email&redirect_uri={redirectURL}";
         Display.DisplayPrompt();
-        Console.WriteLine($"Click on the link to sign in: \n{firstUri} ");
+        Console.WriteLine($"Ctrl Click on the link to sign in: \n{firstUri} ");
 
         HttpListenerRequest authRequest = Server.StartServer([]);
         string authCode;
