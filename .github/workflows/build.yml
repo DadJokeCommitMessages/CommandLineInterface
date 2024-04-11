@@ -13,4 +13,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: 🔧 Build and publish .NET application Windows
+        env:
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
         run: dotnet publish -c Release -r win-x64
