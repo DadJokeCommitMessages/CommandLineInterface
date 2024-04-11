@@ -40,7 +40,7 @@ class ApiCalls
     {
         string newBaseUrl = "http://ec2-3-250-229-22.eu-west-1.compute.amazonaws.com:5282/api/";
         ApiHelper newApiHelper = new ApiHelper(newBaseUrl);
-        string endpoint = "jokes";
+        string endpoint = "user/jokes";
         jokeMap = new OrderedDictionary();
 
         try
