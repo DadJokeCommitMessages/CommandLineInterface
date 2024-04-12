@@ -115,7 +115,10 @@ class ApiCalls
         {
             string answer = await askType();
             selectedJoke.jokeType = answer;
-            await makePutRequest(selectedJoke);
+
+            if(!string.IsNullOrEmpty(answer))
+                await makePutRequest(selectedJoke);
+                
             return;
         }
         else if (editChoice != "1")
@@ -244,17 +247,15 @@ class ApiCalls
             else
             {
                 Display.PrintErrorMessage($"Failed to fetch jokes. Status code: {response.StatusCode}");
-                bool confirmation = Display.GetUserConfirmation("\nWould you still like to submit your joke without changing the type?");
-                if (confirmation) return "yes";
-                else return "no";
+                return "";
             }
         }
         catch (Exception ex)
         {
             Display.PrintErrorMessage("An error occurred: " + ex.Message);
-            bool confirmation = Display.GetUserConfirmation("\nWould you still like to submit your joke without changing the type?");
-            if (confirmation) return "yes";
-            else return "no";
+            return "";
+
+
         }
     }
 
